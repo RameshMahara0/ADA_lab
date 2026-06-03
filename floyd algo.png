@@ -1,0 +1,66 @@
+#include <stdio.h>
+
+void heapBottomUp(int H[], int n) {
+    int i, k, j, v, heap;
+
+    for (i = n / 2; i >= 1; i--) {
+        k = i;
+        v = H[k];
+        heap = 0;
+
+        while (!heap && 2 * k <= n) {
+            j = 2 * k;
+
+            if (j < n) {
+                if (H[j] < H[j + 1])
+                    j = j + 1;
+            }
+
+            if (v >= H[j]) {
+                heap = 1;
+            } else {
+                H[k] = H[j];
+                k = j;
+            }
+        }
+        H[k] = v;
+    }
+}
+
+void heapSort(int H[], int n) {
+    int i, temp;
+
+    heapBottomUp(H, n);
+
+    for (i = n; i > 1; i--) {
+        temp = H[1];
+        H[1] = H[i];
+        H[i] = temp;
+
+        heapBottomUp(H, i - 1);
+    }
+}
+
+int main() {
+    int n, i;
+
+    printf("Enter number of elements: ");
+    scanf("%d", &n);
+
+    int H[n + 1];   // 1-based indexing
+
+    printf("Enter elements:\n");
+    for (i = 1; i <= n; i++) {
+        scanf("%d", &H[i]);
+    }
+
+    heapSort(H, n);
+
+    printf("Sorted array:\n");
+    for (i = 1; i <= n; i++) {
+        printf("%d ", H[i]);
+    }
+
+    printf("\n");
+    return 0;
+}
